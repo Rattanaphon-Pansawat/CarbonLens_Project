@@ -8,7 +8,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
     GetMaterialApp(
-      theme: ThemeData(textTheme: GoogleFonts.kanitTextTheme()),
+      theme: ThemeData(textTheme: GoogleFonts.robotoTextTheme()),
       title: "CarbonsLens",
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
