@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter/gestures.dart';
+
 import '../controllers/welcome_controllers.dart';
 
 class WelcomeView extends GetView<WelcomeController> {
@@ -12,6 +14,7 @@ class WelcomeView extends GetView<WelcomeController> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            
             // --- Stack ภาพ BG + โลโก้คร่อม ---
             Stack(
               clipBehavior: Clip.none,
@@ -86,7 +89,7 @@ class WelcomeView extends GetView<WelcomeController> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32.0),
               child: ElevatedButton.icon(
-                onPressed: () {},
+                onPressed: controller.goToLogin, // ← เพิ่มตรงนี้
                 icon: const Icon(Icons.email, color: Colors.white),
                 label: const Text(
                   'LOGIN WITH EMAIL',
@@ -108,6 +111,7 @@ class WelcomeView extends GetView<WelcomeController> {
             ),
 
             const SizedBox(height: 16),
+
 
             // --- ปุ่ม LOGIN WITH FACEBOOK ---
             Padding(
@@ -170,13 +174,13 @@ class WelcomeView extends GetView<WelcomeController> {
 
             const SizedBox(height: 40),
 
-            // --- ข้อความล่างสุด ---
+           // --- ข้อความล่างสุด ---
             Padding(
               padding: const EdgeInsets.only(bottom: 40.0),
-              child: RichText(
-                text: const TextSpan(
+              child: Text.rich(
+                TextSpan(
                   text: "Didn't have an account ? ",
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Roboto',
                     fontWeight: FontWeight.w400,
                     fontSize: 20,
@@ -185,12 +189,13 @@ class WelcomeView extends GetView<WelcomeController> {
                   children: [
                     TextSpan(
                       text: 'Sign Up',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Roboto',
                         fontWeight: FontWeight.w600,
                         fontSize: 20,
-                        color: Color(0xFF98CD00), // Arcade Glow
+                        color: Color(0xFF98CD00),
                       ),
+                      recognizer: TapGestureRecognizer()..onTap = controller.goToSignUp, // ← เพิ่มตรงนี้
                     ),
                   ],
                 ),

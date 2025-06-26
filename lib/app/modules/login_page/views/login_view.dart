@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-import 'package:carbonlens_app_01/app/widgets/input_text.dart'; 
 import '../controllers/login_controller.dart';
 
 class LoginView extends GetView<LoginController> {
@@ -9,166 +9,178 @@ class LoginView extends GetView<LoginController> {
 
   @override
   Widget build(BuildContext context) {
-    final labelStyle = const TextStyle(
-      fontSize: 16,
-      fontWeight: FontWeight.bold,
-      color: Color(0xFF658147), // สีเขียวเข้ม
-    );
-
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
-      backgroundColor: const Color(0xFF658147),
+      backgroundColor: const Color(0xFF001524),
       body: SafeArea(
         child: Stack(
           children: [
+            // 📌 โลโก้มุมขวาบน
+            Positioned(
+              top: 18,
+              right: 18,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(14),
+                child: Image.asset(
+                  'assets/images/carbonlens_logo.png',
+                  width: 80,
+                  height: 80,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
 
-            // เนื้อหาด้านบนทั้งหมด (ข้อความ "สวัสดี!" กับข้อความต้อนรับ)
-            Padding(
+            SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  SizedBox(height: 32),
-                  Text(
-                    'สวัสดี!',
-                    textAlign: TextAlign.start,
+                children: [
+                  const SizedBox(height: 30),
+
+                  // 🔙 ปุ่ม back (SVG)
+                  GestureDetector(
+                    onTap: controller.handleBack, // 👈 ใช้ controller
+                    child: SvgPicture.asset(
+                      'assets/icons/back_arrow.svg',
+                      width: 32,
+                      height: 32,
+                      color: Colors.white,
+                    ),
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  // 🔤 Log in
+                  const Text(
+                    'Log in',
                     style: TextStyle(
-                      fontSize: 36,
+                      fontFamily: 'Roboto',
+                      fontSize: 32,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFFF4F9F4),
+                      color: Color(0xFFFFFAFA),
                     ),
                   ),
-                  
-                  SizedBox(height: 8),
-                  Text(
-                    'ยินดีต้อนรับ เข้าสู่ คาร์บอนเลนส์\nแอพพลิเคชันคำนวณปริมาณการดูดซับ\nคาร์บอนไดออกไซด์ ของต้นไม้',
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Color(0xFFF4F9F4),
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-            ),
 
-            // กล่อง Login 
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: EdgeInsets.zero, // ชิดซ้าย-ขวาสุดจอ
-                child: Container(
-                  constraints: BoxConstraints(
-                  minHeight: screenHeight * 0.6, // ยืดกล่องให้สูงขึ้นตามขนาดหน้าจอ
-                  ),
-                  padding: const EdgeInsets.all(24), // ระยะขอบในกล่อง
+                  const SizedBox(height: 16),
 
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFF4F9F4), // สีเขียวขาว
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(16),
-                      topRight: Radius.circular(16),
+                  // 🐸 ภาพกบ
+                  Center(
+                    child: Image.asset(
+                      'assets/images/Welcome_frog.png',
+                      height: 270,
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Text('ไม่พบภาพกบ', style: TextStyle(color: Colors.red));
+                      },
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 10,
-                        offset: Offset(0, 4),
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  // 📧 Email
+                  Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFFFAFA),
+                      borderRadius: BorderRadius.circular(29),
+                    ),
+                    height: 58,
+                    child: TextField(
+                      controller: controller.nameController,
+                      style: const TextStyle(
+                        fontFamily: 'Roboto',
+                        fontSize: 20,
+                        color: Colors.black,
                       ),
-                    ],
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.email, color: Colors.black),
+                        hintText: 'Email / Username',
+                        hintStyle: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black87,
+                        ),
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                      ),
+                    ),
                   ),
 
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const Text(
+                  const SizedBox(height: 16),
+
+                  // 🔒 Password
+                  Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFFFAFA),
+                      borderRadius: BorderRadius.circular(29),
+                    ),
+                    height: 58,
+                    child: TextField(
+                      controller: controller.passwordController,
+                      obscureText: true,
+                      style: const TextStyle(
+                        fontFamily: 'Roboto',
+                        fontSize: 20,
+                        color: Colors.black,
+                      ),
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.lock, color: Colors.black),
+                        hintText: 'Password',
+                        hintStyle: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black87,
+                        ),
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  // ❓ Forgot Password
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () {},
+                      child: const Text(
+                        'Forgot Password?',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.normal,
+                          fontFamily: 'Roboto',
+                          color: Color(0xFFE1EEBC),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 60),
+
+                  // 🔘 Login button
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Get.toNamed('/homepage');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF146356),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(29),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
+                      child: const Text(
                         'Login',
                         style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF2D4C28),
+                          fontSize: 20,
+                          fontFamily: 'Roboto',
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFFFFFAFA),
                         ),
                       ),
-                      const SizedBox(height: 16),
-
-                      myInput(
-                        label: 'ชื่อผู้ใช้งาน',
-                        controllerValue: controller.name,
-                        hintText: 'กรอกชื่อผู้ใช้งาน',
-                        labelStyle: labelStyle,
-                      ),
-
-                      myInput(
-                        label: 'รหัสผ่าน',
-                        controllerValue: controller.password,
-                        hintText: 'กรอกรหัสผ่าน',
-                        labelStyle: labelStyle,
-                      ),
-
-                      const SizedBox(height: 10),
-
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: TextButton(
-                          onPressed: () {
-                            // ฟังก์ชันลืมรหัสผ่าน
-                          },
-                          child: const Text(
-                            'ลืมรหัสผ่าน ?',
-                            style: TextStyle(color: Color(0xFF658147)),
-                          ),
-                        ),
-                      ),
-
-                      const SizedBox(height: 12),
-
-                      ElevatedButton(
-                        onPressed: () => Get.toNamed('/homepage'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF658147),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                        ),
-                        child: const Text(
-                          'เข้าสู่ระบบ',
-                          style: TextStyle(fontSize: 18, color: Colors.white),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-            ),
 
-            // โลโก้ fix กึ่งกลางแนวตั้ง ระหว่างสีเขียวกับกล่อง Login
-            Positioned(
-              top: (screenHeight / 2) - (204 / 2) - 20,
-              right: 24,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(24),
-                child: Container(
-                  width: 150,
-                  height: 150,
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.15),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Image.asset(
-                    'assets/images/carbonlens_logo.png',
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                  const SizedBox(height: 32),
+                ],
               ),
             ),
           ],

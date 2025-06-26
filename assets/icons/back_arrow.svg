@@ -1,0 +1,6 @@
+<!-- assets/icons/back_arrow.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24">
+  <path fill="white" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10
+    10-4.48 10-10S17.52 2 12 2zm1 14.59L8.41 12 13 7.41
+    14.41 8.83 10.83 12l3.58 3.59L13 16.59z"/>
+</svg>
