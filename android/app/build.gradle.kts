@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.flutter_application_3"
+    namespace = "com.example.CarbonLens"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 

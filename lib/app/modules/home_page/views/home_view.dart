@@ -112,8 +112,8 @@ class HomeView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _buildNavIcon(() => controller.navigateToPage('/home'), 'assets/images/home_icon.png'),
-              _buildNavIcon(() => controller.navigateToPage('/camedetect'), 'assets/images/cam_icon.png'),
-              _buildNavIcon(() => controller.navigateToPage('/history'), 'assets/images/clock_icon.png'),
+              _buildNavIcon(() => controller.navigateToPage('/camdetect'), 'assets/images/cam_icon.png'),
+              _buildNavIcon(() => controller.navigateToPage('/result'), 'assets/images/clock_icon.png'),
               _buildNavIcon(() => controller.navigateToPage('/profile'), 'assets/images/user_icon.png'),
             ],
           ),
