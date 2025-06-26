@@ -1,32 +1,36 @@
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
-  // กำหนด path สำหรับภาพพื้นหลัง (ในแต่ละการ์ด)
-  final backgroundImages = [
-    'https://static.vecteezy.com/system/resources/previews/008/198/961/large_2x/sustainable-business-with-the-planet-through-renewable-energy-and-green-co2-emissions-whereby-using-renewable-energy-can-limit-climate-change-and-global-warming-free-photo.jpg',
-    'https://static.vecteezy.com/system/resources/previews/046/815/308/large_2x/beautiful-forest-nature-background-free-photo.jpg',
-    'https://static.vecteezy.com/system/resources/previews/048/626/675/large_2x/canopy-of-green-leaves-in-birch-forest-nature-background-free-photo.jpg',
-  ];
+  // ดัชนีของฟีเจอร์ที่เลือก (Estimate CO2, Height, Distance)
+  final selectedFeatureIndex = 0.obs;
 
-  // ปุ่มคำอธิบายและเส้นทางที่เชื่อมโยงกับแต่ละฟังก์ชัน
-  final features = [
-    {
-      'title': 'วัดปริมาณ CO2 และ O2',
-      'description':
-          'ถ่ายภาพเพื่อวัดปริมาณการดูดซับ\nคาร์บอนไดออกไซด์ และ ออกซิเจนของต้นไม้',
-      'route': '/camedetect',
-    },
-    {
-      'title': 'คำนวณ ความสูงต้นไม้',
-      'description':
-          'ฟังก์ชันนี้จะพยายามประมาณ\nความสูงของวัตถุ โดยใช้ความสูงของโทรศัพท์ที่ผู้ใช้กำหนดไว้',
-      'route': '/camedetect',
-    },
-    {
-      'title': 'คำนวณ ระยะห่างต้นไม้',
-      'description':
-          'ฟังก์ชันนี้จะพยายามประมาณ\nระยะทางบนพื้นดิน ระหว่างตำแหน่งของโทรศัพท์กับจุดที่ถูกเล็งโดยเป้าเล็ง',
-      'route': '/camedetect',
-    },
-  ];
+  // เริ่มการตรวจจับภาพ พร้อมไป camdetect และรอผล
+  void startDetection(int index) {
+    selectedFeatureIndex.value = index;
+    Get.toNamed('/camedetect')?.then((_) {
+      // หลังจากกลับจาก camdetect ให้พาไปยังหน้าผลลัพธ์ตาม index ที่เลือกไว้
+      switch (index) {
+        case 0:
+          Get.offNamed('/result_01');
+          break;
+        case 1:
+          Get.offNamed('/result_02');
+          break;
+        case 2:
+          Get.offNamed('/result_03');
+          break;
+        default:
+          Get.offNamed('/result');
+      }
+    });
+  }
+
+  // ใช้ควบคุมการเปลี่ยนหน้าใน bottom navigation bar
+  void navigateToPage(String route) {
+    if (route == '/home') {
+      // ถ้าอยู่หน้า home อยู่แล้วไม่ต้องทำอะไร
+      return;
+    }
+    Get.toNamed(route);
+  }
 }

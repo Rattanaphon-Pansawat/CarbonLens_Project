@@ -90,8 +90,8 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.RESULT_02,
-      page: () => const ResultView(),
-      binding: ResultBinding(),
+      page: () => const Result02View(),
+      binding: Result02Binding(),
     ),
     GetPage(
       name: _Paths.RESULT_03,

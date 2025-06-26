@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../controllers/home_controller.dart';
 
 class HomeView extends StatelessWidget {
@@ -8,148 +7,225 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(HomeController());
+    final HomeController controller = Get.find<HomeController>();
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF4F9F4),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF658147),
-        title: const Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            'หน้าหลัก',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        iconTheme: const IconThemeData(color: Colors.white),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // ข้อความต้อนรับ
-            Container(
-              color: Colors.white,
-              padding: const EdgeInsets.all(24),
-              child: const Text(
-                'ยินดีต้อนรับสู่แอพพลิเคชั่นคาร์บอนเลนส์\n'
-                'เครื่องมือช่วยคุณวิเคราะห์และติดตามปริมาณ\n'
-                'คาร์บอนไดออกไซด์ เลือกหัวข้อที่คุณอยากคำนวณ\n'
-                'แล้วเริ่มกันเลย!',
-                style: TextStyle(fontSize: 16),
-              ),
-            ),
-
-            // สร้าง card จาก controller.features
-            for (int i = 0; i < controller.features.length; i++)
-              Container(
-                color: _getBackgroundColor(i),
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 90,
-                          height: 50,
-                          color: Colors.white,
-                          child: Image.network(
-                            controller.backgroundImages[i],
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: Text(
-                            controller.features[i]['description']!,
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        onPressed: () {
-                          Navigator.pushNamed(
-                            context,
-                            controller.features[i]['route']!,
-                          );
-                        },
-                        child: Text(
-                          controller.features[i]['title']!,
-                          style: const TextStyle(color: Colors.black),
-                        ),
-                      ),
-                    ),
-                  ],
+      backgroundColor: const Color(0xFF001524),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // หัวข้อ Welcome
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                child: Text(
+                  'Welcome to\nCarbonLens',
+                  style: TextStyle(
+                    fontFamily: 'Roboto',
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFFFFFAFA),
+                  ),
                 ),
               ),
-          ],
+
+              // รูปภาพป่า
+              ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Image.asset(
+                  'assets/images/bg_forest.png',
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: 220,
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              // การ์ด Estimate CO2 and O2
+              _buildFeatureCard(
+                context,
+                title: 'Estimate CO2 and O2',
+                descriptionParts: [
+                  TextSpan(text: '   วัดปริมาณการดูดซับ '),
+                  TextSpan(text: 'คาร์บอน', style: TextStyle(fontWeight: FontWeight.bold)),
+                  TextSpan(text: '\n'),
+                  TextSpan(text: 'ไดออกไซด์', style: TextStyle(fontWeight: FontWeight.bold)),
+                  TextSpan(text: ' และ '),
+                  TextSpan(text: 'ออกซิเจน', style: TextStyle(fontWeight: FontWeight.bold)),
+                  TextSpan(text: ' ของต้นไม้'),
+                ],
+                imagePath: 'assets/images/CO2_home1.png',
+                onPressed: () => controller.startDetection(0),
+              ),
+
+              // การ์ด Estimate Tree Height
+              _buildFeatureCard(
+                context,
+                title: 'Estimate Tree Height',
+                descriptionParts: [
+                  TextSpan(text: '   ฟังก์ชันนี้จะประมาณ '),
+                  TextSpan(text: 'ความสูง', style: TextStyle(fontWeight: FontWeight.bold)),
+                  TextSpan(text: '\nต้นไม้ โดยใช้ความสูงที่ผู้ใช้กำหนด'),
+                ],
+                imagePath: 'assets/images/tree_home2.png',
+                onPressed: () => controller.startDetection(1),
+              ),
+
+              // การ์ด Estimate Tree Distance
+              _buildFeatureCard(
+                context,
+                title: 'Estimate Tree Distance',
+                descriptionParts: [
+                  TextSpan(text: '   ฟังก์ชันนี้จะประมาณ '),
+                  TextSpan(text: 'ระยะทาง', style: TextStyle(fontWeight: FontWeight.bold)),
+                  TextSpan(text: '\nระหว่างตำแหน่งที่เล็งโดยเป้าเล็ง'),
+                ],
+                imagePath: 'assets/images/tree_home3.png',
+                onPressed: () => controller.startDetection(2),
+              ),
+
+              const SizedBox(height: 16),
+            ],
+          ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color(0xFF658147),
-        selectedItemColor: const Color(0xFF658147),
-        unselectedItemColor: const Color.fromARGB(179, 59, 51, 51),
-        currentIndex: 0,
-        onTap: (index) {
-          if (index == 0) {
-            Navigator.pushNamed(context, '/home');
-          } else if (index == 1) {
-            Navigator.pushNamed(context, '/camedetect');
-          } else if (index == 2) {
-            Navigator.pushNamed(context, '/history');
-          } else if (index == 3) {
-            Navigator.pushNamed(context, '/profile');
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+
+      // แถบนำทางด้านล่าง
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.only(bottom: 10, left: 16, right: 16),
+        child: Container(
+          decoration: BoxDecoration(
+            color: const Color(0xFFFFFAFA),
+            borderRadius: BorderRadius.circular(23),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+                offset: const Offset(0, -2),
+              ),
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.camera),
-            label: 'Scan',
+          padding: const EdgeInsets.symmetric(horizontal: 29, vertical: 14),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildNavIcon(() => controller.navigateToPage('/home'), 'assets/images/home_icon.png'),
+              _buildNavIcon(() => controller.navigateToPage('/camedetect'), 'assets/images/cam_icon.png'),
+              _buildNavIcon(() => controller.navigateToPage('/history'), 'assets/images/clock_icon.png'),
+              _buildNavIcon(() => controller.navigateToPage('/profile'), 'assets/images/user_icon.png'),
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.history),
-            label: 'History',
+        ),
+      ),
+    );
+  }
+
+  // สร้างการ์ดฟีเจอร์แต่ละอัน
+  Widget _buildFeatureCard(
+    BuildContext context, {
+    required String title,
+    required List<TextSpan> descriptionParts,
+    required String imagePath,
+    required VoidCallback onPressed,
+  }) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color(0xFFEBF4F6),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // ข้อความซ้ายของการ์ด
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF146356),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                RichText(
+                  text: TextSpan(
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'Roboto',
+                      color: Colors.black,
+                    ),
+                    children: descriptionParts,
+                  ),
+                ),
+                const SizedBox(height: 12),
+
+                // ปุ่ม Check Now พร้อมไอคอนด้านหลัง
+                TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: const Color(0xFF98CD00),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  ),
+                  onPressed: onPressed,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: const [
+                      Text(
+                        'Check Now',
+                        style: TextStyle(
+                          fontSize: 11.51,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Roboto',
+                          color: Color(0xFFFFFAFA),
+                        ),
+                      ),
+                      SizedBox(width: 4),
+                      Icon(
+                        Icons.arrow_forward,
+                        color: Color(0xFFFFFAFA),
+                        size: 16,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
+          const SizedBox(width: 8),
+
+          // ภาพด้านขวาของการ์ด
+          Align(
+            alignment: title.contains('Height') ? Alignment.center : Alignment.topCenter,
+            child: Image.asset(
+              imagePath,
+              width: 70,
+              height: 70,
+            ),
           ),
         ],
       ),
     );
   }
 
-  // กำหนดสีพื้นหลังแต่ละกล่องตามลำดับ
-  Color _getBackgroundColor(int index) {
-    switch (index) {
-      case 0:
-        return const Color(0xFF74B49B);
-      case 1:
-        return const Color(0xFFA7D7C5);
-      case 2:
-        return const Color(0xFF5C8D89);
-      default:
-        return Colors.grey.shade300;
-    }
+  // ไอคอนใน Navigation Bar
+  Widget _buildNavIcon(VoidCallback onTap, String iconPath) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Image.asset(
+        iconPath,
+        width: 30,
+        height: 30,
+        color: Colors.black,
+      ),
+    );
   }
 }
